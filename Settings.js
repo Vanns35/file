@@ -1,15 +1,30 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, BackHandler,HandleBack,AsyncStorage } from 'react-native'
 
 import {Actions} from 'react-native-router-flux';
 
 
    
 export default class Settings extends Component <{}>{
+
+  constructor(props){
+    super(props);
+    this.state ={back : null, isLoading: true, dataSource : [] }
+  }
+
+  async resetKey() {
+
+    try {
+      await AsyncStorage.removeItem('user');
+      Actions.Routes();
+
+    } catch (error) {
+      console.log("Error resetting data" + error);
+    }
+  }
   
    render() {
       return (
-         
          <View style={styles.container}>
 
              <TouchableOpacity
@@ -42,7 +57,7 @@ export default class Settings extends Component <{}>{
 
                   <TouchableOpacity
                      style = {styles.touch}
-                    onPress={Actions.Routes}>
+                    onPress={this.resetKey.bind(this)}>
                      <Text style = {styles.text}>
                         Logout
                      </Text>

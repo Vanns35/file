@@ -5,7 +5,7 @@ import {
   View,
   StatusBar ,
   TextInput,
-  TouchableOpacity 
+  TouchableOpacity ,AsyncStorage
 } from 'react-native';
 
 import Logo from '../components/Logo';
@@ -14,6 +14,22 @@ import Logo from '../components/Logo';
 import {Actions} from 'react-native-router-flux';
 
 export default class Login extends Component<{}> {
+
+  async componentDidMount() {
+        //Have a try and catch block for catching errors.
+        var value = await AsyncStorage.getItem('user');
+          if( value !== null)
+          {
+            Actions.index();
+          }
+    }
+
+    saveData = () =>
+      {
+        AsyncStorage.setItem('user','responseJson');
+                    //alert('ok');
+                    Actions.index();
+      }
 
   
 
@@ -37,7 +53,7 @@ export default class Login extends Component<{}> {
               placeholderTextColor = "black"
               ref={(input) => this.password = input}
               />  
-           <TouchableOpacity  onPress={Actions.index} style={styles.button}>
+           <TouchableOpacity  onPress={this.saveData } style={styles.button}>
              <Text style={styles.buttonText}>Login</Text>
            </TouchableOpacity>     
 
